@@ -12,45 +12,39 @@ struct _data {
    int minuto;
 
 };
+
 typedef struct _data Data;
 
 
 struct _evento {
-   int codigo;
-   Data dataEvento;
-   float duracao;
-   char descricao[100];
-   struct _evento *right;
-   struct _evento *left;
+    int codigo;
+    Data dataEvento;
+    float duracao;
+    char descricao[100];
+    struct _evento *right;
+    struct _evento *left;
+};
 
-}; 
 typedef struct _evento Evento;
 
-
-// define a raiz para ser incluida na arvore;
-
-struct Evento* defineComp(int codigo, Data dataEvento, float duracao, char descricao[]){
-    struct Evento* evento = (struct Evento*)malloc(sizeof(struct Evento));
-    evento->codigo=codigo;
-    evento->dataEvento.dia=dataEvento.dia;
-    evento->dataEvento.mes=dataEvento.mes;
-    evento->dataEvento.ano=dataEvento.ano;
-    evento->dataEvento.hora=dataEvento.hora;
-    evento->dataEvento.minuto=dataEvento.minuto;
-    evento->duracao=duracao;
+// Função para criar um novo evento
+Evento* defineComp(int codigo, Data dataEvento, float duracao, char descricao[]) {
+    Evento* evento = (Evento*)malloc(sizeof(Evento));
+    evento->codigo = codigo;
+    evento->dataEvento.dia = dataEvento.dia;
+    evento->dataEvento.mes = dataEvento.mes;
+    evento->dataEvento.ano = dataEvento.ano;
+    evento->dataEvento.hora = dataEvento.hora;
+    evento->dataEvento.minuto = dataEvento.minuto;
+    evento->duracao = duracao;
     strcpy(evento->descricao, descricao);
-    evento->left=NULL;
-    evento->right=NULL;
+    evento->left = NULL;
+    evento->right = NULL;
     return evento;
 }
 
-//desalocar memoria para a funcao anterior no decorrer do codigo: free(evento)
-
-
-
-// verifica existencia do compromisso na arvore
-
-int verificarExistenciaComp(struct Evento* raiz, Data dataEvento) {
+// Função para verificar a existência de um compromisso na árvore
+int verificarExistenciaComp(Evento* raiz, Data dataEvento) {
     if (raiz == NULL) {
         return 0;
     }
@@ -63,37 +57,48 @@ int verificarExistenciaComp(struct Evento* raiz, Data dataEvento) {
     }
     int existeEsquerda = verificarExistenciaComp(raiz->left, dataEvento);
     int existeDireita = verificarExistenciaComp(raiz->right, dataEvento);
-    return existeEsquerda || existeDireita; 
+    return existeEsquerda || existeDireita; // Retorna 1 se o compromisso existe em qualquer uma das subárvores
 }
 
-struct Evento* incluirComp(struct Evento* raiz, int codigo, Data dataEvento, float duracao, char descricao[]) {
+// Função para incluir um novo compromisso na árvore
+Evento* incluirComp(Evento* raiz, int codigo, Data dataEvento, float duracao, char descricao[]) {
     if (raiz == NULL) {
-        return defineComp(codigo, dataEvento, duracao, descricao);
+        return defineComp(codigo, dataEvento, duracao, descricao); 
     }
     if (verificarExistenciaComp(raiz, dataEvento)) {
         printf("Já existe um compromisso agendado para a mesma data e hora.\n");
-        return raiz;
+        return raiz; 
     }
     if (codigo < raiz->codigo) {
-        raiz->left = incluirComp(raiz->left, codigo, dataEvento, duracao, descricao);
+        raiz->left = incluirComp(raiz->left, codigo, dataEvento, duracao, descricao); 
     } else if (codigo > raiz->codigo) {
-        raiz->right = incluirComp(raiz->right, codigo, dataEvento, duracao, descricao);
+        raiz->right = incluirComp(raiz->right, codigo, dataEvento, duracao, descricao); 
     }
     return raiz;
 }
 
+void listarComp(Evento* raiz) {
+    if (raiz == NULL) {
+        return; 
+    }
 
+    listarComp(raiz->left); 
+    printf("\n");
+    printf("Codigo: %d\n", raiz->codigo);
+    printf("Data e hora: %d/%d/%d - %d:%d\n", raiz->dataEvento.dia, raiz->dataEvento.mes,
+           raiz->dataEvento.ano, raiz->dataEvento.hora, raiz->dataEvento.minuto);
+    printf("Duração: %.2f\n", raiz->duracao);
+    printf("Descrição: %s\n", raiz->descricao);
 
+    listarComp(raiz->right);
+}
 
-
-
-int main(){
-
-    int i=1;
-    struct Evento* raiz = NULL;
+int main() {
+    int i = 1;
+    Evento* raiz = NULL;
     int cod = 0;
 
-    while (i==1) {
+    while (i == 1) {
         int opcao;
         scanf("%d", &opcao);
         if (opcao == 1) {
@@ -117,26 +122,27 @@ int main(){
             printf("Descrição: ");
             scanf("%s", descricao);
             raiz = incluirComp(raiz, cod, dataEvento, duracao, descricao);
-    return 0;
+
+            printf("Todos os compromissos: \n");
+            listarComp(raiz);
+            
+        }
+    }
 }
 
-}
-}
 
-void consultarComp()(
+/*/
+void consultarComp()(*
     
 )
+*/
 
-void listarComp(){
-
-
-}
-
+/*/
 void altComp(){
 
 
 }
-
+*/
 /*
 .
 .funcao em lista simples
@@ -153,10 +159,10 @@ void listarTodos(Evento *EstruturaPrinc){
 
 } 
 */
+//
+//void excluirComp(){
 
-void excluirComp(){
 
 
-
-}
+//}
 
