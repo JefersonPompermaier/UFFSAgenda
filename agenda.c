@@ -16,7 +16,7 @@ Evento* incluirComp(Evento* raiz, int codigo, Data dataEvento, float duracao, ch
         raiz->right = incluirComp(raiz->right, codigo, dataEvento, duracao, descricao); 
     }
     return raiz;
-
+}
 
 // Função para verificar a existência de um compromisso na árvore
 int verificarExistenciaComp(Evento* raiz, Data dataEvento) {
@@ -160,3 +160,5 @@ void listarComp(Evento* raiz) {
 
     listarComp(raiz->right);
 }
+
+
